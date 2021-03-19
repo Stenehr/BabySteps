@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import NavBar from './NavBar';
+import PostList from '../../features/posts/PostList';
 
 function App() {
   return (
     <div className="App">
-      <Button color="red">TEST</Button>
+      <NavBar />
+      <PostList />
     </div>
   );
 }
