@@ -14,6 +14,8 @@ namespace BabySteps.API
     public class Startup
     {
         private readonly IConfiguration _config;
+        private readonly string _developmentCorsPolicy = "developmentCorsPolicy";
+        private readonly string _developmentClientApp = "http://localhost:3000";
         public Startup(IConfiguration config)
         {
             _config = config;
@@ -27,6 +29,14 @@ namespace BabySteps.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BabySteps.API", Version = "v1" });
+            });
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy(_developmentCorsPolicy, policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(_developmentClientApp);
+                });
             });
 
             services.AddDbContext<DataContext>(opt =>
@@ -49,6 +59,8 @@ namespace BabySteps.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_developmentCorsPolicy);
 
             app.UseAuthorization();
 
