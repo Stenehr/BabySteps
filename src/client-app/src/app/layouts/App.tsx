@@ -1,17 +1,34 @@
 import React from 'react';
 import NavBar from './NavBar';
-import PostList from '../../features/posts/PostList';
 import { Container } from 'react-bootstrap';
 import { Route } from 'react-router';
-import HomePage from './HomePage';
+import Routes from '../routes';
 
 function App() {
   return (
     <div className="App">
       <NavBar />
       <Container style={{ marginTop: '2em' }}>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/posts" component={PostList} />
+        <Route
+          exact
+          path={Routes.home.path}
+          component={Routes.home.component}
+        />
+        <Route
+          exact
+          path={Routes.posts.path}
+          component={Routes.posts.component}
+        />
+        <Route
+          exact
+          path={Routes.editPost.path}
+          component={Routes.editPost.component}
+        />
+        <Route
+          exact
+          path={Routes.createPost.path}
+          component={Routes.createPost.component}
+        />
       </Container>
     </div>
   );

@@ -1,7 +1,7 @@
 export interface Post {
     id: string;
     title: string;
-    date?: Date;
+    date?: string;
     insertDate?: Date;
     content: string;
     deleteDate?: Date;
