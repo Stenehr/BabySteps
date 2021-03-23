@@ -6,6 +6,7 @@ import React from 'react';
 interface Route {
   path: string;
   component: React.ComponentType<any>
+  createPathWithId?: (id: string) => string;
 }
 
 interface Routes {
@@ -26,7 +27,8 @@ const r: Routes = {
   },
   editPost: {
     path: '/posts/edit/:id',
-    component: CreatePost
+    component: CreatePost,
+    createPathWithId: (id: string) => `/posts/edit/${id}`
   },
   createPost: {
     path: '/posts/create',

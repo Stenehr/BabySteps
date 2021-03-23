@@ -17,6 +17,7 @@ module.exports = {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     semi: 'off',
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    'no-debugger': ['warn']
   }
 };
