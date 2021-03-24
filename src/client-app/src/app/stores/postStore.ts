@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import agent from '../api/agent';
 import { Post } from '../models/post';
 
@@ -29,22 +29,25 @@ export default class PostStore {
     } catch (error) {
       console.log(error);
     } finally {
-      this.loadingPosts = false;
+      runInAction(() => (this.loadingPosts = false));
     }
   };
 
-  createPost = (post: Post) => {
-    this.postSaveLoading = true;
+  createPost = async (post: Post) => {
+    this.setPostSaveLoading(true);
 
-    // api call to save post;
-    this.postsRegistry.set(post.id, post);
-
-    // finally
-    this.postSaveLoading = false;
+    try {
+      await agent.Posts.create(post);
+      this.postsRegistry.set(post.id, post);
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.setPostSaveLoading(false);
+    }
   };
 
   updatePost = (post: Post) => {
-    this.postSaveLoading = true;
+    this.setPostSaveLoading(true);
 
     let editPost = this.findPost(post.id);
     editPost = { ...editPost, ...post };
@@ -53,8 +56,10 @@ export default class PostStore {
     // api call to change post
 
     // finally
-    this.postSaveLoading = false;
+    this.setPostSaveLoading(false);
   };
 
   findPost = (id: string) => this.postsRegistry.get(id);
+
+  setPostSaveLoading = (loading: boolean) => (this.postSaveLoading = loading);
 }

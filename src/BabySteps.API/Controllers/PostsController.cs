@@ -10,9 +10,12 @@ namespace src.BabySteps.API.Controllers
     public class PostsController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IList<Post>>> GetPosts() => await Mediator.Send(new PostList.Query());
+        public async Task<ActionResult> GetPosts() => HandleResult(await Mediator.Send(new PostList.Query()));
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(Guid id) => await Mediator.Send(new PostDetails.Query(id));
-    }
+        public async Task<ActionResult> GetPost(Guid id) => HandleResult(await Mediator.Send(new PostDetails.Query(id)));
+
+        [HttpPost]
+        public async Task<ActionResult> CreatePost(Post post) => HandleResult(await Mediator.Send(new CreatePost.Command{ Post = post }));
+  }
 }
