@@ -16,6 +16,13 @@ namespace src.BabySteps.API.Controllers
         public async Task<ActionResult> GetPost(Guid id) => HandleResult(await Mediator.Send(new PostDetails.Query(id)));
 
         [HttpPost]
-        public async Task<ActionResult> CreatePost(Post post) => HandleResult(await Mediator.Send(new CreatePost.Command{ Post = post }));
+        public async Task<ActionResult> CreatePost(Post post) => HandleResult(await Mediator.Send(new CreatePost.Command { Post = post }));
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditPost(Guid id, Post post)
+        {
+            post.Id = id;
+            return HandleResult(await Mediator.Send(new EditPost.Command { Post = post }));
+        }
   }
 }

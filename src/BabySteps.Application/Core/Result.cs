@@ -3,6 +3,7 @@ namespace src.BabySteps.Application.Core
     public enum ErrorType
     {
         NotFound,
+        DatabaseChangesFailed
     }
 
     public class Result<T>

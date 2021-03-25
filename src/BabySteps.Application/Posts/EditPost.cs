@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using src.BabySteps.Application.Core;
 using src.BabySteps.Domain;
@@ -7,22 +8,30 @@ using src.BabySteps.Persistance;
 
 namespace src.BabySteps.Application.Posts
 {
-    public class CreatePost
+    public class EditPost
     {
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+
+            public Handler(DataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.Posts.Add(request.Post);
-                var wasCreated = await _context.SaveChangesAsync() > 0;
+                var post = await _context.Posts.FindAsync(request.Post.Id);
+                if (post == null)
+                    return Result<Unit>.Failure(ErrorMessages.NotFound, ErrorType.DatabaseChangesFailed);
 
-                return wasCreated ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure(ErrorMessages.FailedCreate, ErrorType.DatabaseChangesFailed);
+                _mapper.Map(request.Post, post);
+
+                var madeChanges = await _context.SaveChangesAsync() > 0;
+
+                return madeChanges ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure(ErrorMessages.FailedEdit, ErrorType.DatabaseChangesFailed);
             }
         }
 

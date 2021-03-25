@@ -21,7 +21,7 @@ namespace src.BabySteps.Application.Posts
             {
                 var post = await _context.Posts.FindAsync(request.Id);
 
-                return post != null ? Result<Post>.Success(post) : Result<Post>.Failure("Postitust ei leitud", ErrorType.NotFound);
+                return post != null ? Result<Post>.Success(post) : Result<Post>.Failure(ErrorMessages.NotFound, ErrorType.NotFound);
             }
         }
 

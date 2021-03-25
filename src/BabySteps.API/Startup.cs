@@ -44,6 +44,7 @@ namespace BabySteps.API
             );
 
             services.AddMediatR(typeof(PostList.Handler).Assembly);
+            services.AddAutoMapper(typeof(PostsMappingProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

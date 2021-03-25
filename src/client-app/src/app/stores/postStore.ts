@@ -46,17 +46,20 @@ export default class PostStore {
     }
   };
 
-  updatePost = (post: Post) => {
+  updatePost = async (post: Post) => {
     this.setPostSaveLoading(true);
 
     let editPost = this.findPost(post.id);
     editPost = { ...editPost, ...post };
-    console.log(editPost);
-    this.postsRegistry.set(editPost.id, editPost);
-    // api call to change post
 
-    // finally
-    this.setPostSaveLoading(false);
+    try {
+      await agent.Posts.update(editPost);
+      this.postsRegistry.set(editPost.id, editPost);
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.setPostSaveLoading(false);
+    }
   };
 
   findPost = (id: string) => this.postsRegistry.get(id);
