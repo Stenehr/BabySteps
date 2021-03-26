@@ -49,7 +49,7 @@ export default class PostStore {
   updatePost = async (post: Post) => {
     this.setPostSaveLoading(true);
 
-    let editPost = this.findPost(post.id);
+    let editPost = await this.findPost(post.id);
     editPost = { ...editPost, ...post };
 
     try {
@@ -62,7 +62,12 @@ export default class PostStore {
     }
   };
 
-  findPost = (id: string) => this.postsRegistry.get(id);
+  findPost = async (id: string) => {
+    if (this.postsRegistry.size < 1) {
+      await this.loadPosts();
+    }
+    return await this.postsRegistry.get(id);
+  };
 
   setPostSaveLoading = (loading: boolean) => (this.postSaveLoading = loading);
 }

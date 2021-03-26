@@ -1,6 +1,7 @@
 import HomePage from './layouts/HomePage';
 import PostList from '../features/posts/PostList';
 import CreatePost from '../features/posts/CreatePost';
+import PostDetails from '../features/posts/PostDetails';
 import React from 'react';
 
 interface Route {
@@ -14,6 +15,7 @@ interface Routes {
   posts: Route;
   editPost: Route;
   createPost: Route;
+  postDetails: Route;
 }
 
 const r: Routes = {
@@ -33,6 +35,11 @@ const r: Routes = {
   createPost: {
     path: '/posts/create',
     component: CreatePost
+  },
+  postDetails: {
+    path: '/posts/details/:id',
+    component: PostDetails,
+    createPathWithId: (id: string) => `/posts/details/${id}`
   }
 };
 

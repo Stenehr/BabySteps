@@ -52,7 +52,12 @@ function postList() {
               <Row className="mt-3">
                 <Col sm={12}>
                   <ButtonGroup size="sm" className="pr-2">
-                    <Button>Detailid</Button>
+                    <Button
+                      as={Link}
+                      to={Routes.postDetails.createPathWithId!(post.id)}
+                    >
+                      Detailid
+                    </Button>
                     <Button
                       variant="warning"
                       as={Link}

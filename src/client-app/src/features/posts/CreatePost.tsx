@@ -17,22 +17,25 @@ function createPost() {
 
   const { postStore } = useStore();
   const { updatePost, createPost, findPost } = postStore;
-  const [post, setPost] = useState(initialPost);
+  const [post, setPost] = useState<Post | undefined>(initialPost);
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (id) {
-      setPost(findPost(id)!);
+    async function setPostAsync() {
+      if (id) {
+        setPost(await findPost(id));
+      }
     }
+    setPostAsync();
   }, [id, findPost]);
 
   const history = useHistory();
 
   function handleSubmit() {
-    if (post.id.length === 0) {
+    if (post!.id.length === 0) {
       const newPost = {
-        ...post,
+        ...post!,
         id: uuid()
       };
 
@@ -41,7 +44,7 @@ function createPost() {
       // TODO - push to details view
       history.push(Routes.posts.path);
     } else {
-      updatePost(post);
+      updatePost(post!);
       // TODO - push to details view
       history.push(Routes.posts.path);
     }
@@ -51,7 +54,7 @@ function createPost() {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     const { name, value } = event.target;
-    setPost({ ...post, [name]: value });
+    setPost({ ...post!, [name]: value });
   }
 
   return (
@@ -63,7 +66,7 @@ function createPost() {
             <Form.Control
               name="title"
               type="text"
-              value={post.title}
+              value={post!.title}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -72,7 +75,7 @@ function createPost() {
             <Form.Control
               name="date"
               type="date"
-              value={post.date}
+              value={post!.date}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -82,7 +85,7 @@ function createPost() {
               name="content"
               as="textarea"
               rows={10}
-              value={post.content}
+              value={post!.content}
               onChange={handleInputChange}
             />
           </Form.Group>
