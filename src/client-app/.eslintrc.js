@@ -18,6 +18,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     semi: 'off',
     'space-before-function-paren': 'off',
-    'no-debugger': ['warn']
+    'no-debugger': ['warn'],
+    'no-unused-vars': ['warn']
   }
 };

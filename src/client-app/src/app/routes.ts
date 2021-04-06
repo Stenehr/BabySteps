@@ -4,18 +4,18 @@ import CreatePost from '../features/posts/CreatePost';
 import PostDetails from '../features/posts/PostDetails';
 import React from 'react';
 
-interface Route {
+export interface AppRoute {
   path: string;
   component: React.ComponentType<any>
   createPathWithId?: (id: string) => string;
 }
 
 interface Routes {
-  home: Route;
-  posts: Route;
-  editPost: Route;
-  createPost: Route;
-  postDetails: Route;
+  home: AppRoute;
+  posts: AppRoute;
+  editPost: AppRoute;
+  createPost: AppRoute;
+  postDetails: AppRoute;
 }
 
 const r: Routes = {

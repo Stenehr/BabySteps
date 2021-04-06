@@ -1,17 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import {
-  Accordion,
-  Button,
-  ButtonGroup,
-  Card,
-  Col,
-  Row,
-  Spinner
-} from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { useStore } from '../../app/stores/store';
 import Routes from '../../app/routes';
 import { Link } from 'react-router-dom';
+
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 function postList() {
   const { postStore } = useStore();
@@ -20,60 +14,36 @@ function postList() {
     postStore.loadPosts();
   }, [postStore]);
 
+  function cutTextAfter(text: string, cutAfter: number) {
+    return text.length > cutAfter ? `${text.substr(0, cutAfter)}...` : text;
+  }
+
   if (postStore.loadingPosts) {
-    return (
-      <Row>
-        <Col>
-          <Spinner animation="border" />
-        </Col>
-      </Row>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
-    <Accordion>
+    <Row>
       {postStore.posts.map((post, index) => (
-        <Card key={index}>
-          <Accordion.Toggle as={Card.Header} eventKey={index.toString()}>
-            <Row>
-              <Col sm={8}>
-                <h3>{post.title}</h3>
-              </Col>
-              <Col sm={4}>
-                <span>{post.date}</span>
-              </Col>
-            </Row>
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey={index.toString()}>
+        <Col md={4} key={index} className="pb-3">
+          <Card>
             <Card.Body>
-              <Row>
-                <Col sm={12}>{post.content}</Col>
-              </Row>
-              <Row className="mt-3">
-                <Col sm={12}>
-                  <ButtonGroup size="sm" className="pr-2">
-                    <Button
-                      as={Link}
-                      to={Routes.postDetails.createPathWithId!(post.id)}
-                    >
-                      Detailid
-                    </Button>
-                    <Button
-                      variant="warning"
-                      as={Link}
-                      to={Routes.editPost.createPathWithId!(post.id)}
-                    >
-                      Muuda
-                    </Button>
-                    <Button variant="danger">Kustuta</Button>
-                  </ButtonGroup>
-                </Col>
-              </Row>
+              <Card.Title title={post.title}>{cutTextAfter(post.title, 60)}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">
+                {post.date}
+              </Card.Subtitle>
+              <Card.Text>{cutTextAfter(post.content, 200)}</Card.Text>
+              <Card.Link
+                as={Link}
+                to={Routes.postDetails.createPathWithId!(post.id)}
+              >
+                Loe rohkem...
+              </Card.Link>
             </Card.Body>
-          </Accordion.Collapse>
-        </Card>
+          </Card>
+        </Col>
       ))}
-    </Accordion>
+    </Row>
   );
 }
 

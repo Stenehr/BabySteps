@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import agent from '../api/agent';
 import { Post } from '../models/post';
 
@@ -6,6 +6,7 @@ export default class PostStore {
   postsRegistry = new Map<string, Post>();
   loadingPosts = false;
   postSaveLoading = false;
+  postDetailsLoading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -66,8 +67,9 @@ export default class PostStore {
     if (this.postsRegistry.size < 1) {
       await this.loadPosts();
     }
-    return await this.postsRegistry.get(id);
+    return toJS(this.postsRegistry.get(id));
   };
 
   setPostSaveLoading = (loading: boolean) => (this.postSaveLoading = loading);
+  setPostDetailsLoading = (loading: boolean) => (this.postDetailsLoading = loading);
 }
